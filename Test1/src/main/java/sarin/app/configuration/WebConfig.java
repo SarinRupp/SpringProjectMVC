@@ -1,0 +1,48 @@
+package sarin.app.configuration;
+
+import javax.sql.DataSource;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import sarin.app.services.implement.StudentServicesImplement;
+
+
+@Configuration
+@ComponentScan(basePackages="sarin.app") /*<context:component-scan base-package="sarin.com.app" />*/
+@EnableWebMvc
+public class WebConfig extends WebMvcConfigurerAdapter {
+	@Bean
+	public ViewResolver getViewResolver(){
+		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+		resolver.setPrefix("/page/");
+		resolver.setSuffix(".jsp");
+		return resolver;
+	}
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry){
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+	}
+	
+	@Bean
+	public DataSource getDataSource(){
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/Student");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("123");
+        return dataSource;
+	}
+	
+	/*@Bean
+	public StudentServicesImplement getStudentDao(){
+		return new StudentServicesImplement(getDataSource());
+	}*/
+}
