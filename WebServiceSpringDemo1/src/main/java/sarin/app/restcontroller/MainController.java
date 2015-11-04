@@ -1,38 +1,55 @@
 package sarin.app.restcontroller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.bind.annotation.RestController;
 import sarin.app.entitie.Student;
 import sarin.app.service.StudentServices;
 
 
 
-@Controller
-@RequestMapping("/")
+@RestController
+/*@RequestMapping("/")*/
 public class MainController {
 	
 	@Autowired
 	StudentServices studentImplement; 
 	
-	@RequestMapping(value={"/" , "/index"}, method = RequestMethod.GET)
-	/*public String homePage(ModelMap model) throws SQLException {
+	@RequestMapping(value={"/me"}, method = RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> getAllStudent() throws SQLException{		
+		ArrayList<Student> students = studentImplement.list();
+		Map<String, Object> map = new HashMap<String,Object>();
+		if(students.isEmpty()){
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "STUDENT NOT FOUND...");
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.NOT_FOUND);
+		}
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "STUDENT HAS BEEN FOUNDS");
+		map.put("RESPONSE_DATA", studentImplement.list());
+		return new ResponseEntity<Map<String,Object>>
+									(map,HttpStatus.OK);
+		
+	}
+	
+	/*@RequestMapping(value={"/" , "/index"}, method = RequestMethod.GET)
+	public String homePage(ModelMap model) throws SQLException {
 		//ModelAndView model=new ModelAndView("index");		
 		model.addAttribute("list",studentImplement.list());	
 		model.addAttribute("msg","Listing");
 		System.out.println(studentImplement.list().size());
 		System.out.println("index");
 		return "index";
-	}*/
+	}
 	public ModelAndView homePage() throws SQLException {
 		ModelAndView model=new ModelAndView("index");		
 		model.addObject("list",studentImplement.list());	
@@ -108,5 +125,5 @@ public class MainController {
 		studentImplement.delete(id);
 		
 		return "redirect:/";
-	}	
+	}	*/
 }
