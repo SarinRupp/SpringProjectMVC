@@ -8,9 +8,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,11 +48,9 @@ public class MainController {
 	
 	@RequestMapping(value={"/add/"}, method = RequestMethod.POST)
 	public ResponseEntity<Map<String,Object>> addStudent(@RequestBody Student student) throws SQLException{
-		System.out.println("HEllo");
 		
-		return null;
 		
-		/*Map<String, Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String,Object>();
 		if(studentImplement.insert(student)){
 			map.put("STATUS", HttpStatus.CREATED.value());
 			map.put("MESSAGE", "INSERT SUCCESS...");
@@ -63,9 +63,51 @@ public class MainController {
 			return new ResponseEntity<Map<String,Object>>
 										(map,HttpStatus.NOT_FOUND);
 		}
-		*/
+		
 		
 	}
+	@RequestMapping(value={"/update/{id}"}, method = RequestMethod.PUT)
+	
+public ResponseEntity<Map<String,Object>> UpdateStudent(@RequestBody Student student,@PathVariable int id) throws SQLException{
+		
+		
+		Map<String, Object> map = new HashMap<String,Object>();
+		if(studentImplement.update(student,id)){
+			map.put("STATUS", HttpStatus.CREATED.value());
+			map.put("MESSAGE", "Update  SUCCESS...");
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.OK);
+		}
+		else{
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "Update NOT SUCCESS...");			
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.NOT_FOUND);
+		}
+		
+		
+	}
+	@RequestMapping(value={"/delete/{id}"}, method = RequestMethod.DELETE)
+	
+	public ResponseEntity<Map<String,Object>> DeleteStudent(@PathVariable("id") int id) throws SQLException{
+			
+			
+			Map<String, Object> map = new HashMap<String,Object>();
+			if(studentImplement.delete(id)){
+				map.put("STATUS", HttpStatus.CREATED.value());
+				map.put("MESSAGE", "Delete  SUCCESS...");
+				return new ResponseEntity<Map<String,Object>>
+											(map,HttpStatus.OK);
+			}
+			else{
+				map.put("STATUS", HttpStatus.NOT_FOUND.value());
+				map.put("MESSAGE", "Delete NOT SUCCESS...");			
+				return new ResponseEntity<Map<String,Object>>
+											(map,HttpStatus.NOT_FOUND);
+			}
+			
+			
+		}
 	/*@RequestMapping(value={"/" , "/index"}, method = RequestMethod.GET)
 	public String homePage(ModelMap model) throws SQLException {
 		//ModelAndView model=new ModelAndView("index");		

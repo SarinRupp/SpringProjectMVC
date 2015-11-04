@@ -93,7 +93,7 @@ public class StudentServicesImplement implements StudentServices {
 			return false;
 	}
 
-	public boolean update(Student stu) throws SQLException {
+	public boolean update(Student stu,int id) throws SQLException {
 		try {		
 			con=dataSource.getConnection();		
 			String sql = "UPDATE student set first_name = ? ,last_name = ?  ,classroom = ? WHERE id=?";
@@ -101,7 +101,7 @@ public class StudentServicesImplement implements StudentServices {
 			ps.setString(1, stu.getFirst_name());
 			ps.setString(2, stu.getLast_name());		
 			ps.setString(3, stu.getClassroom());
-			ps.setInt(4, stu.getId());
+			ps.setInt(4, id);
 			if(ps.executeUpdate()>0){
 				return true;
 			}
