@@ -24,10 +24,10 @@
 	  	<property name="url" value="${dataSource.url}" />
 	  	<property name="username" value="${dataSource.username}" />
 	  	<property name="password" value="${dataSource.password}" /> -->
-	  <bean id="dataSource"
+	  <bean id="dataSource" 
 	  		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 	  	<property name="driverClassName" value="org.postgresql.Driver" />
-	  	<property name="url" value="jdbc:postgresql://localhost:5432/Student" />
+	  	<property name="url" value="jdbc:postgresql://192.168.178.121:5432/Student" />
 	  	<property name="username" value="postgres" />
 	  	<property name="password" value="1234" />
 	 </bean>
