@@ -8,22 +8,25 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import sarin.app.entitie.Student;
 import sarin.app.service.StudentServices;
 
 
 
 @RestController
-/*@RequestMapping("/")*/
+@RequestMapping("/")
 public class MainController {
 	
 	@Autowired
 	StudentServices studentImplement; 
 	
-	@RequestMapping(value={"/me"}, method = RequestMethod.GET)
+	@RequestMapping(value={"/me/"}, method = RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> getAllStudent() throws SQLException{		
 		ArrayList<Student> students = studentImplement.list();
 		Map<String, Object> map = new HashMap<String,Object>();
@@ -41,6 +44,28 @@ public class MainController {
 		
 	}
 	
+	@RequestMapping(value={"/add/"}, method = RequestMethod.POST)
+	public ResponseEntity<Map<String,Object>> addStudent(@RequestBody Student student) throws SQLException{
+		System.out.println("HEllo");
+		
+		return null;
+		
+		/*Map<String, Object> map = new HashMap<String,Object>();
+		if(studentImplement.insert(student)){
+			map.put("STATUS", HttpStatus.CREATED.value());
+			map.put("MESSAGE", "INSERT SUCCESS...");
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.OK);
+		}
+		else{
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "INSERT NOT SUCCESS...");			
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.NOT_FOUND);
+		}
+		*/
+		
+	}
 	/*@RequestMapping(value={"/" , "/index"}, method = RequestMethod.GET)
 	public String homePage(ModelMap model) throws SQLException {
 		//ModelAndView model=new ModelAndView("index");		
