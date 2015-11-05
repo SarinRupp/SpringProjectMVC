@@ -41,7 +41,8 @@
 		<div class="col-sm-8 center-block " style="float:none">
 		  <div class="panel panel-info">
 		    <div class="panel-body">
-		       <form action="add" method="post">
+		       <!-- <form action="add" method="post"> -->
+		       <form>
 						<!-- <div class="form-group" >
 							<label>Student ID: </label>
 							<input type="text" class="form-control" name="id" id="id"  >
@@ -63,7 +64,7 @@
 						</div>																																							
 						
 						<div class="form-group" style="margin-left:20%;">
-							<input type="submit" class="btn btn-success" id="add"  name="add"  value="Add">
+							<input type="button" class="btn btn-success" id="add"  name="add"  value="Add" onclick="insert();">
 							<input type="reset" class="btn btn-info" id="clear" name="clear"  value="Cancel"/>
 							<a class="btn btn-success" href="${pageContext.request.contextPath}">HOME</a>
 						</div>
@@ -78,14 +79,32 @@
 	
 	</div>
 	<script type="text/javascript">		
-	 function deletePost(id) {		 		 
-			 $.post("delete", {
-	 			id : id	 			 	
-	 		}, function(data, status) {
-	 			
-	 		});
-			 window.location.reload(); 
-	 	}	
+	$(document).ready(function(){
+		
+	});
+	function insert(){
+		 var f_name=$("#first_name").val();
+		var l_name=$("#last_name").val();
+		var classroom=$("#classroom").val();
+		var JSONObject= {
+	            "first_name":f_name,
+	            "last_name":l_name,
+	            "classroom":classroom
+	    };
+	 $.ajax({  
+      url:'http://localhost:8080/WebServiceSpringDemo1/add/',  
+      type:'post',
+      contentType: 'application/json;charset=utf-8', // type of data
+//       dataType: 'JSON',
+      data: JSON.stringify(JSONObject), // make JSON string
+//       crossDomain: true,
+      success: function(data) { 
+//                var jsonData = $.parseJSON(data); //if data is not json
+               alert(data);
+               console.log("Success..." + data);
+      }}); 
+      
+		}
 	</script>
 </body>
 </html>

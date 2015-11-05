@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import sarin.app.entitie.Student;
 import sarin.app.service.StudentServices;
@@ -28,8 +29,10 @@ public class MainController {
 	@Autowired
 	StudentServices studentImplement; 
 	
-	@RequestMapping(value={"/me/"}, method = RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> getAllStudent() throws SQLException{		
+	@RequestMapping(value={"/index"}, method = RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> getAllStudent() throws SQLException{
+			
+		
 		ArrayList<Student> students = studentImplement.list();
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(students.isEmpty()){
@@ -44,9 +47,10 @@ public class MainController {
 		return new ResponseEntity<Map<String,Object>>
 									(map,HttpStatus.OK);
 		
+		
 	}
-	
-	@RequestMapping(value={"/add/"}, method = RequestMethod.POST)
+
+	@RequestMapping(value={"/add"}, method = RequestMethod.POST)
 	public ResponseEntity<Map<String,Object>> addStudent(@RequestBody Student student) throws SQLException{
 		
 		
@@ -108,6 +112,11 @@ public ResponseEntity<Map<String,Object>> UpdateStudent(@RequestBody Student stu
 			
 			
 		}
+	@RequestMapping(value={"/add"}, method = RequestMethod.GET)
+	public ModelAndView addForm() throws SQLException{			
+		ModelAndView model=new ModelAndView("add");
+		return model;
+	}
 	/*@RequestMapping(value={"/" , "/index"}, method = RequestMethod.GET)
 	public String homePage(ModelMap model) throws SQLException {
 		//ModelAndView model=new ModelAndView("index");		
@@ -126,11 +135,7 @@ public ResponseEntity<Map<String,Object>> UpdateStudent(@RequestBody Student stu
 		return model;
 	}
 	
-	@RequestMapping(value={"/add"}, method = RequestMethod.GET)
-	public ModelAndView addForm() throws SQLException{			
-		ModelAndView model=new ModelAndView("add");
-		return model;
-	}
+	
 	
 	@RequestMapping(value={"/add"}, method = RequestMethod.POST)
 	public ModelAndView insertStu(@ModelAttribute("student") Student student ) throws SQLException{			
