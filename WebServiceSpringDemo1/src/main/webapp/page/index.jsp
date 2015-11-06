@@ -70,36 +70,21 @@ td a{
 	</div>
 	<script type="text/javascript">		
 	$(document).ready(function(){
-		$('body').on('click', '.del', function(){
-			/* alert($(this).attr("stuid")); */
-			
-			  var el ="${pageContext.request.contextPath}";		
+		 var el ="${pageContext.request.contextPath}";	
+		/* delete fucntion  */
+		$('body').on('click', '.del', function(){			
+			var othis=$(this);			   	
 				$.ajax({  
-			        url:el+"/delete/"+$(this).attr("stuid"),  
-			        type:'DELETE',	       
-			       success: function(data) {  
-			    	   
-			    	    
-			    	list();
-			    	 
-			              console.log("Success..." + data);
+			          url:el+"/delete/"+$(this).attr("stuid"),  
+			          type:'DELETE',	       
+			          success: function(data) {  			    	   			    	 
+			    	  othis.parents('tr').remove();
+			          console.log("Success..." + data);
 			     }}); 
 		});
-
 	});
-	list();
 	
-	function Del(id){
-		 var el ="${pageContext.request.contextPath}";		
-		$.ajax({  
-	        url:el+"/delete/"+id,  
-	        type:'DELETE',	       
-	       success: function(data) {     
-	    	  		
-	              console.log("Success..." + data);
-	     }});  
-		
-	}
+	list();	
 	function list(){
 	 $.ajax({  
         url:'http://localhost:8080/WebServiceSpringDemo1/list.act',  
