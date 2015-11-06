@@ -41,7 +41,8 @@
 		<div class="col-sm-8 center-block " style="float:none">
 		  <div class="panel panel-info">
 		    <div class="panel-body">
-		       <form action="${pageContext.request.contextPath}/update1" method="post">
+		       <%-- <form action="${pageContext.request.contextPath}/update1" method="post"> --%>
+		       <form>
 						 <div class="form-group" >
 							<label>Student ID: </label>
 							<input type="text" class="form-control" name="id" id="id" value="${updateId.id}"  readonly="readonly">
@@ -63,7 +64,7 @@
 						</div>																																							
 						
 						<div class="form-group" style="margin-left:20%;">
-							<input type="submit" class="btn btn-success" id="update" value="Update">
+							<input type="button" class="btn btn-success"  value="Update" onclick="update();">
 							<input type="reset" class="btn btn-info" id="clear"  value="Cancel">
 							<a class="btn btn-success" href="${pageContext.request.contextPath}">HOME</a>
 						</div>
@@ -84,15 +85,40 @@
 	    
 	
 	</div>
+	
 	<script type="text/javascript">		
-	 function deletePost(id) {		 		 
-			 $.post("delete", {
-	 			id : id	 			 	
-	 		}, function(data, status) {
-	 			
-	 		});
-			 window.location.reload(); 
-	 	}	
+	$(document).ready(function(){
+		
+	});
+	function update(){
+		
+		var id=$("#id").val();
+		var f_name=$("#first_name").val();
+		var l_name=$("#last_name").val();
+		var classroom=$("#classroom").val();
+		var JSONObject= {
+				"id": id,
+	            "first_name":f_name,
+	            "last_name":l_name,
+	            "classroom":classroom
+	    };
+	 $.ajax({  
+      url:'http://localhost:8080/WebServiceSpringDemo1/update/',  
+      type:'put',
+      contentType: 'application/json;charset=utf-8', // type of data
+//       dataType: 'JSON',
+      data: JSON.stringify(JSONObject), // make JSON string
+//       crossDomain: true,
+      success: function(data) { 
+//                var jsonData = $.parseJSON(data); //if data is not json
+               window.location.replace("http://localhost:8080/WebServiceSpringDemo1/");
+               console.log("Success..." + data);
+      }}); 
+     
+      
+		}
+	 
 	</script>
+	
 </body>
 </html>

@@ -28,6 +28,9 @@
 	width:35px;
 	cursor:pointer;	
 }
+td a{
+	margin:10px;
+}
 </style>
 
 
@@ -55,39 +58,9 @@
 					<a href="${pageContext.request.contextPath}/search" class="btn btn-default">
           				<span class="glyphicon glyphicon-search"></span></a>
 				</span>
-				<h1>${msg}</h1>
+				
 				<br/><br/>			                 
-					<table class="table table-striped table-bordered table-hover table-condensed" >
-							<thead>
-							
-							<tr>							
-							
-								<th>ID</th>
-								<th>FRIST NAME</th>
-								<th>LASTNAME</th>								
-								<th>CLASSROOM</th>	
-								<th>ACTIOIN</th>															
-							</tr>
-							</thead>
-							<tbody id="listcontent" >
-							
-						 <%-- <c:forEach  var="element" items='${list}'>
-							<tr>
-							<td>${element.id}</td>
-							<td>${element.first_name}</td>
-							<td>${element.last_name}</td>							
-							<td>${element.classroom}</td>
-								 <td id="option">					
-									<a class="btn btn-default" href="${pageContext.request.contextPath}/update/${element.id}">Update</a>
-									<!-- <span><button id="btnedit" name="btnedit" class="btn btn-success">View</button></span> -->
-									<a class="btn btn-success" href="${pageContext.request.contextPath}/view/${element.id}">View</a>
-									<span><input type="button"  value="Delete" id="btndelete" name="btndelete" class="btn btn-danger" onclick="deletePost(${element.id})"/></span>
-									<a class="btn btn-danger" href="${pageContext.request.contextPath}/delete/${element.id}">DELETE</a>
-								</td>
-							</tr>
-					</c:forEach>		 --%>						  
-							</tbody>
-					</table>
+					<table id="listcontent" class="table table-striped table-bordered table-hover table-condensed" ></table>
 				
 				<!-- End of div Table for show information -->
 			</div>
@@ -97,21 +70,50 @@
 	</div>
 	<script type="text/javascript">		
 	$(document).ready(function(){
-		
+		$('body').on('click', '.del', function(){
+			/* alert($(this).attr("stuid")); */
+			
+			  var el ="${pageContext.request.contextPath}";		
+				$.ajax({  
+			        url:el+"/delete/"+$(this).attr("stuid"),  
+			        type:'DELETE',	       
+			       success: function(data) {  
+			    	   
+			    	    
+			    	list();
+			    	 
+			              console.log("Success..." + data);
+			     }}); 
+		});
+
 	});
 	list();
+	
+	function Del(id){
+		 var el ="${pageContext.request.contextPath}";		
+		$.ajax({  
+	        url:el+"/delete/"+id,  
+	        type:'DELETE',	       
+	       success: function(data) {     
+	    	  		
+	              console.log("Success..." + data);
+	     }});  
+		
+	}
 	function list(){
 	 $.ajax({  
-     url:'http://localhost:8080/WebServiceSpringDemo1/list.act',  
-     type:'get',
-     contentType: 'application/json;charset=utf-8', // type of data
+        url:'http://localhost:8080/WebServiceSpringDemo1/list.act',  
+        type:'get',
+        contentType: 'application/json;charset=utf-8', // type of data
 //      dataType: 'JSON',
      //data: JSON.stringify(JSONObject), // make JSON string
 //      crossDomain: true,
-     success: function(data) { 
+       success: function(data) { 
 //               var jsonData = $.parseJSON(data); //if data is not json
                //alert(data.RESPONSE_DATA[0].first_name);
+               
                $("#listcontent").html(createTable(data));
+               
               console.log("Success..." + data);
      }}); 
      
@@ -119,16 +121,33 @@
 	
 	function createTable(data) {
 		var str="";
+			str+="<thead><tr>"+
+			"<th>ID</th>"+
+			"<th>FRIST NAME</th>"+
+			"<th>LAST NAME</th>"+
+			"<th>CLASSROOM</th>"+
+			"<th>ACTION</th>"+
+		    "</thead>";
 		for (var i = 0; i < data.RESPONSE_DATA.length; i++) {
-			str += "<tr>" + "<td id=studid" + i + ">" + data.RESPONSE_DATA[i].id + "</td>"
-					+ "<td>" + data.RESPONSE_DATA[i].first_name + "</td>" + "<td>"
-					+data.RESPONSE_DATA[i].last_name + "</td>" + "<td>" + data.RESPONSE_DATA[i].classroom
-					+"</td></tr>";
-					/* + "</td>" + "<td>" + data[i].stuclass + "</td>" + "<td style='text-align:center;'>"
-					+ changestatus(data[i].stustatus,data[i].stuid) + "</td><td style='text-align:center;'>"+ actionbutton(data[i].stuid, data[i].stuname,data[i].stugender,data[i].stuuniversity,data[i].stuclass,data[i].stustatus) +"</td></tr>"; */
+			str += "<tbody><tr><td>"+ data.RESPONSE_DATA[i].id         + "</td>"+ 
+					"<td>"   + data.RESPONSE_DATA[i].first_name + "</td>"+ 
+					"<td>"   + data.RESPONSE_DATA[i].last_name  + "</td>"+
+					"<td>"   + data.RESPONSE_DATA[i].classroom  + "</td>"+					
+					"<td style='width:22%'>"   + actionButton(data.RESPONSE_DATA[i].id)                   + "</td></tr></tbody>";					
+					/*  + "</td>" + "<td>" + data[i].stuclass + "</td>" + "<td style='text-align:center;'>"
+					+ changestatus(data[i].stustatus,data[i].stuid) + "</td><td style='text-align:center;'>"+ actionbutton(data[i].stuid, data[i].stuname,data[i].stugender,data[i].stuuniversity,data[i].stuclass,data[i].stustatus) +"</td></tr>"; */ 
 		}
 		return str;
 	} 
+	function actionButton(id){
+		 var str="";
+		 
+		 str+="<a class='btn btn-default' href='${pageContext.request.contextPath}/update/"+id+"'>Update</a>";		
+		 str+="<a class='btn btn-success' href='${pageContext.request.contextPath}/view/"+id+"'>View</a>";
+		 /* str+="<a class='btn btn-danger' onclick='Del("+id+");'>DELETE</a>"; */
+		 str+="<a class='btn btn-danger del'  stuid="+id+">DELETE</a>";
+		return str; 
+	}
 	</script>
 </body>
 </html>

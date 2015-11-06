@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,9 +38,7 @@ public class MainController {
 	}
 	
 	@RequestMapping(value={"/list.act"}, method = RequestMethod.GET)
-	public ResponseEntity<Map<String,Object>> getAllStudent() throws SQLException{
-			
-		
+	public ResponseEntity<Map<String,Object>> getAllStudent() throws SQLException{					
 		ArrayList<Student> students = studentImplement.list();
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(students.isEmpty()){
@@ -77,13 +76,11 @@ public class MainController {
 		
 		
 	}
-	@RequestMapping(value={"/update/{id}"}, method = RequestMethod.PUT)
+	@RequestMapping(value={"/update"}, method = RequestMethod.PUT)
 	
-public ResponseEntity<Map<String,Object>> UpdateStudent(@RequestBody Student student,@PathVariable int id) throws SQLException{
-		
-		
+public ResponseEntity<Map<String,Object>> UpdateStudent(@RequestBody Student student) throws SQLException{				
 		Map<String, Object> map = new HashMap<String,Object>();
-		if(studentImplement.update(student,id)){
+		if(studentImplement.update(student)){
 			map.put("STATUS", HttpStatus.CREATED.value());
 			map.put("MESSAGE", "Update  SUCCESS...");
 			return new ResponseEntity<Map<String,Object>>
@@ -98,9 +95,10 @@ public ResponseEntity<Map<String,Object>> UpdateStudent(@RequestBody Student stu
 		
 		
 	}
-	@RequestMapping(value={"/delete/{id}"}, method = RequestMethod.DELETE)
-	
+	@RequestMapping(value={"/delete/{id}"}, method = RequestMethod.DELETE)	
 	public ResponseEntity<Map<String,Object>> DeleteStudent(@PathVariable("id") int id) throws SQLException{
+		 
+		
 			
 			
 			Map<String, Object> map = new HashMap<String,Object>();
@@ -122,6 +120,17 @@ public ResponseEntity<Map<String,Object>> UpdateStudent(@RequestBody Student stu
 	@RequestMapping(value={"/add"}, method = RequestMethod.GET)
 	public ModelAndView addForm() throws SQLException{			
 		ModelAndView model=new ModelAndView("add");
+		return model;
+	}
+	@RequestMapping(value={"/update/{id}"}, method = RequestMethod.GET)
+	public ModelAndView updateForm(@PathVariable int id) throws SQLException{			
+		ModelAndView model=new ModelAndView("update");				
+		for(int i=0;i<studentImplement.list().size();i++){
+			if(studentImplement.list().get(i).getId()==id){
+				model.addObject("updateId",studentImplement.list().get(i));
+			break;	
+			}					
+		}
 		return model;
 	}
 	
