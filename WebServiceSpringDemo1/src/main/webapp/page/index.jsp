@@ -69,8 +69,9 @@
 								<th>ACTIOIN</th>															
 							</tr>
 							</thead>
-							<tbody >
-						 <c:forEach  var="element" items='${list}'>
+							<tbody id="listcontent" >
+							
+						 <%-- <c:forEach  var="element" items='${list}'>
 							<tr>
 							<td>${element.id}</td>
 							<td>${element.first_name}</td>
@@ -80,11 +81,11 @@
 									<a class="btn btn-default" href="${pageContext.request.contextPath}/update/${element.id}">Update</a>
 									<!-- <span><button id="btnedit" name="btnedit" class="btn btn-success">View</button></span> -->
 									<a class="btn btn-success" href="${pageContext.request.contextPath}/view/${element.id}">View</a>
-									<%-- <span><input type="button"  value="Delete" id="btndelete" name="btndelete" class="btn btn-danger" onclick="deletePost(${element.id})"/></span> --%>
+									<span><input type="button"  value="Delete" id="btndelete" name="btndelete" class="btn btn-danger" onclick="deletePost(${element.id})"/></span>
 									<a class="btn btn-danger" href="${pageContext.request.contextPath}/delete/${element.id}">DELETE</a>
 								</td>
 							</tr>
-					</c:forEach>								  
+					</c:forEach>		 --%>						  
 							</tbody>
 					</table>
 				
@@ -94,15 +95,40 @@
 		    </div>
 		</div>
 	</div>
-	<!-- <script type="text/javascript">		
-	 function deletePost(id) {		 		 
-			 $.post("delete", {
-	 			id : id	 			 	
-	 		}, function(data, status) {
-	 			
-	 		});
-			 window.location.reload(); 
-	 	}	
-	</script> -->
+	<script type="text/javascript">		
+	$(document).ready(function(){
+		
+	});
+	list();
+	function list(){
+	 $.ajax({  
+     url:'http://localhost:8080/WebServiceSpringDemo1/list.act',  
+     type:'get',
+     contentType: 'application/json;charset=utf-8', // type of data
+//      dataType: 'JSON',
+     //data: JSON.stringify(JSONObject), // make JSON string
+//      crossDomain: true,
+     success: function(data) { 
+//               var jsonData = $.parseJSON(data); //if data is not json
+               //alert(data.RESPONSE_DATA[0].first_name);
+               $("#listcontent").html(createTable(data));
+              console.log("Success..." + data);
+     }}); 
+     
+		}
+	
+	function createTable(data) {
+		var str="";
+		for (var i = 0; i < data.RESPONSE_DATA.length; i++) {
+			str += "<tr>" + "<td id=studid" + i + ">" + data.RESPONSE_DATA[i].id + "</td>"
+					+ "<td>" + data.RESPONSE_DATA[i].first_name + "</td>" + "<td>"
+					+data.RESPONSE_DATA[i].last_name + "</td>" + "<td>" + data.RESPONSE_DATA[i].classroom
+					+"</td></tr>";
+					/* + "</td>" + "<td>" + data[i].stuclass + "</td>" + "<td style='text-align:center;'>"
+					+ changestatus(data[i].stustatus,data[i].stuid) + "</td><td style='text-align:center;'>"+ actionbutton(data[i].stuid, data[i].stuname,data[i].stugender,data[i].stuuniversity,data[i].stuclass,data[i].stustatus) +"</td></tr>"; */
+		}
+		return str;
+	} 
+	</script>
 </body>
 </html>

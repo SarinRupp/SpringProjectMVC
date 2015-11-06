@@ -29,7 +29,14 @@ public class MainController {
 	@Autowired
 	StudentServices studentImplement; 
 	
-	@RequestMapping(value={"/index"}, method = RequestMethod.GET)
+	
+	@RequestMapping(value={"/","/index"}, method = RequestMethod.GET)
+	public ModelAndView list() throws SQLException{			
+		ModelAndView model=new ModelAndView("index");
+		return model;
+	}
+	
+	@RequestMapping(value={"/list.act"}, method = RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>> getAllStudent() throws SQLException{
 			
 		
@@ -117,6 +124,7 @@ public ResponseEntity<Map<String,Object>> UpdateStudent(@RequestBody Student stu
 		ModelAndView model=new ModelAndView("add");
 		return model;
 	}
+	
 	/*@RequestMapping(value={"/" , "/index"}, method = RequestMethod.GET)
 	public String homePage(ModelMap model) throws SQLException {
 		//ModelAndView model=new ModelAndView("index");		
