@@ -118,14 +118,14 @@ public class StudentServicesImplement implements StudentServices {
 			return false;
 	}
 
-	public ArrayList<Student> search(String keyword, String type, int row) throws SQLException {
+	public ArrayList<Student> search(Student stu) throws SQLException {
 		try {
 			Student s;
 			con=dataSource.getConnection();
 			ResultSet rs = null;
-			String sql = "SELECT * FROM  student where "+type+" like ? LIMIT  "+row;
+			String sql = "SELECT * FROM  student where first_name like ?";
 			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1,"%" +keyword+"%");
+			ps.setString(1,"%" +stu.getFirst_name()+"%");
 			rs=ps.executeQuery();
 			ArrayList<Student> a = new ArrayList<Student>();
 			

@@ -46,18 +46,24 @@ td a{
 	    
 		<div class="col-sm-12">
 		<div ng-app="myApp" ng-controller="planetController">  
-			<div class="panel panel-info">
-			
-				
+			<div class="panel panel-info">						
 				<!-- Div Table for show information -->
-				<div class="panel-body"  id="tablerepone" >  
-				<span>
-				<a class="btn btn-success" href="${pageContext.request.contextPath}/add">ADD</a>
-				</span>
-				<span>
-					<a href="${pageContext.request.contextPath}/search" class="btn btn-default">
+				<div class="panel-body"  id="tablerepone" >
+			<form class="form-inline pull-right" role="form">  
+				 <div class="form-group"> 
+					<a class="btn btn-default btn-sm" href="${pageContext.request.contextPath}/add">
+					 <span class="glyphicon glyphicon-plus"></span>
+					</a>
+				</div> 
+				 
+				<%-- <span>
+						<a href="${pageContext.request.contextPath}/search" class="btn btn-default">
           				<span class="glyphicon glyphicon-search"></span></a>
-				</span>
+				</span>--%>
+				<div class="form-group">    					
+    					<input type="text" class="form-control" id="search">
+  				</div>
+			</form>
 				
 				<br/><br/>			                 
 					<table id="listcontent" class="table table-striped table-bordered table-hover table-condensed" ></table>
@@ -82,6 +88,23 @@ td a{
 			          console.log("Success..." + data);
 			     }}); 
 		});
+		$('body').on('change', '#search', function(){			
+			var othis=$(this).val();	
+			var JSONObject= {
+		            "first_name":othis	            
+		    };
+				 $.ajax({  
+			          url:el+"/search/",  
+			          type:'POST',	  
+			          data: JSON.stringify(JSONObject),
+			          contentType: 'application/json;charset=utf-8',
+			          success: function(data) {  
+			        	
+			          console.log("Success..." + data);
+			     }});  
+			    
+		});
+		
 	});
 	
 	list();	
@@ -90,12 +113,8 @@ td a{
         url:'http://localhost:8080/WebServiceSpringDemo1/list.act',  
         type:'get',
         contentType: 'application/json;charset=utf-8', // type of data
-//      dataType: 'JSON',
-     //data: JSON.stringify(JSONObject), // make JSON string
-//      crossDomain: true,
-       success: function(data) { 
-//               var jsonData = $.parseJSON(data); //if data is not json
-               //alert(data.RESPONSE_DATA[0].first_name);
+
+       success: function(data) {      
                
                $("#listcontent").html(createTable(data));
                
@@ -118,9 +137,8 @@ td a{
 					"<td>"   + data.RESPONSE_DATA[i].first_name + "</td>"+ 
 					"<td>"   + data.RESPONSE_DATA[i].last_name  + "</td>"+
 					"<td>"   + data.RESPONSE_DATA[i].classroom  + "</td>"+					
-					"<td style='width:22%'>"   + actionButton(data.RESPONSE_DATA[i].id)                   + "</td></tr></tbody>";					
-					/*  + "</td>" + "<td>" + data[i].stuclass + "</td>" + "<td style='text-align:center;'>"
-					+ changestatus(data[i].stustatus,data[i].stuid) + "</td><td style='text-align:center;'>"+ actionbutton(data[i].stuid, data[i].stuname,data[i].stugender,data[i].stuuniversity,data[i].stuclass,data[i].stustatus) +"</td></tr>"; */ 
+					"<td style='width:22%'>"   + actionButton(data.RESPONSE_DATA[i].id)+ 
+					"</td></tr></tbody>";										
 		}
 		return str;
 	} 

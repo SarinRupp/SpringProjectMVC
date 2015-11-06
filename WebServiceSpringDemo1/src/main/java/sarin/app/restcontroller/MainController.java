@@ -134,6 +134,28 @@ public ResponseEntity<Map<String,Object>> UpdateStudent(@RequestBody Student stu
 		return model;
 	}
 	
+	@RequestMapping(value={"/search"}, method = RequestMethod.POST)	
+		public ResponseEntity<Map<String,Object>> searchAction(@RequestBody Student student) throws SQLException{
+		
+		ArrayList<Student> students = studentImplement.search(student);
+		Map<String, Object> map = new HashMap<String,Object>();
+		if(students.isEmpty()){
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "STUDENT NOT FOUND...");
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.NOT_FOUND);
+		}
+		System.out.println(studentImplement.search(student).size());
+		map.put("STATUS", HttpStatus.OK.value());
+		map.put("MESSAGE", "STUDENT HAS BEEN FOUNDS");
+		map.put("RESPONSE_DATA", studentImplement.search(student));
+		return new ResponseEntity<Map<String,Object>>
+									(map,HttpStatus.OK);
+		
+		
+						
+	}
+	
 	/*@RequestMapping(value={"/" , "/index"}, method = RequestMethod.GET)
 	public String homePage(ModelMap model) throws SQLException {
 		//ModelAndView model=new ModelAndView("index");		
