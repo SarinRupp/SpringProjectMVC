@@ -11,5 +11,6 @@ public interface StudentServices {
 		boolean delete(int id) throws SQLException;
 		boolean insert(Student stu) throws SQLException;
 		boolean update(Student stu) throws SQLException;
-		ArrayList<Student> search(Student keyword) throws SQLException;
+		ArrayList<Student> search(String keyword) throws SQLException;
+		ArrayList<Student> update(int id) throws SQLException;
 }

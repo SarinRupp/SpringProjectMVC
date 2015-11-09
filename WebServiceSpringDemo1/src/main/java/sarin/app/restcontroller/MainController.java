@@ -123,21 +123,35 @@ public ResponseEntity<Map<String,Object>> UpdateStudent(@RequestBody Student stu
 		return model;
 	}
 	@RequestMapping(value={"/update/{id}"}, method = RequestMethod.GET)
-	public ModelAndView updateForm(@PathVariable int id) throws SQLException{			
-		ModelAndView model=new ModelAndView("update");				
-		for(int i=0;i<studentImplement.list().size();i++){
-			if(studentImplement.list().get(i).getId()==id){
-				model.addObject("updateId",studentImplement.list().get(i));
-			break;	
-			}					
-		}
-		return model;
-	}
-	
-	@RequestMapping(value={"/search"}, method = RequestMethod.POST)	
-		public ResponseEntity<Map<String,Object>> searchAction(@RequestBody Student student) throws SQLException{
 		
-		ArrayList<Student> students = studentImplement.search(student);
+		public ResponseEntity<Map<String,Object>> updateForm(@PathVariable("id") int id) throws SQLException{
+		System.out.println(studentImplement.update(id));
+		ArrayList<Student> students = studentImplement.update(id);
+		Map<String,Object> map= new HashMap<String, Object>();
+		if(students.isEmpty()){
+			map.put("STATUS", HttpStatus.NOT_FOUND.value());
+			map.put("MESSAGE", "STUDENT NOT FOUND...");
+			return new ResponseEntity<Map<String,Object>>
+										(map,HttpStatus.NOT_FOUND);
+		}		
+		
+				map.put("STATUS", HttpStatus.OK.value());
+				map.put("MESSAGE", "STUDENT HAS BEEN FOUNDS");
+				map.put("RESPONSE_DATA",studentImplement.update(id));							
+				return new ResponseEntity<Map<String,Object>>
+				(map,HttpStatus.OK);
+			
+		}
+			
+		
+	
+	
+	
+	
+	@RequestMapping(value={"/search/{s}"}, method = RequestMethod.GET)	
+		public ResponseEntity<Map<String,Object>> searchAction(@PathVariable("s") String key) throws SQLException{
+		System.out.println(key);
+		ArrayList<Student> students = studentImplement.search(key);
 		Map<String, Object> map = new HashMap<String,Object>();
 		if(students.isEmpty()){
 			map.put("STATUS", HttpStatus.NOT_FOUND.value());
@@ -145,10 +159,10 @@ public ResponseEntity<Map<String,Object>> UpdateStudent(@RequestBody Student stu
 			return new ResponseEntity<Map<String,Object>>
 										(map,HttpStatus.NOT_FOUND);
 		}
-		System.out.println(studentImplement.search(student).size());
+		System.out.println(studentImplement.search(key).size());
 		map.put("STATUS", HttpStatus.OK.value());
 		map.put("MESSAGE", "STUDENT HAS BEEN FOUNDS");
-		map.put("RESPONSE_DATA", studentImplement.search(student));
+		map.put("RESPONSE_DATA", studentImplement.search(key));
 		return new ResponseEntity<Map<String,Object>>
 									(map,HttpStatus.OK);
 		

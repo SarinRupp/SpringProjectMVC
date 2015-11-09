@@ -90,6 +90,9 @@
 	$(document).ready(function(){
 		
 	});
+	
+	
+	
 	function update(){
 		
 		var id=$("#id").val();
@@ -112,6 +115,7 @@
       success: function(data) { 
 //                var jsonData = $.parseJSON(data); //if data is not json
                window.location.replace("http://localhost:8080/WebServiceSpringDemo1/");
+               
                console.log("Success..." + data);
       }}); 
      

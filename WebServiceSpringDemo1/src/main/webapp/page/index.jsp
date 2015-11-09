@@ -49,12 +49,41 @@ td a{
 			<div class="panel panel-info">						
 				<!-- Div Table for show information -->
 				<div class="panel-body"  id="tablerepone" >
+				
+				<form>
+						 <div class="form-group" >
+							<label>Student ID: </label>
+							<input type="text" class="form-control" name="id" id="id"   readonly="readonly">
+						</div>
+						<div class="form-group">
+							<label>First Name: </label>
+							<input type="text" class="form-control" name="first_name" id="first_name" placeholder="first name"  >
+						</div>
+						
+						<div class="form-group">
+							<label>Last Name: </label>
+							<input type="text" class="form-control" name="last_name" id="last_name" placeholder="last name" >
+						</div>
+						
+						
+						<div class="form-group">
+							<label>ClassRoom: </label>
+							<input type="text" class="form-control" name="classroom" id="classroom" placeholder="classroom" >
+						</div>																																							
+						
+						<div class="form-group" style="margin-left:20%;">
+							<input type="button" class="btn btn-success"  value="ADD" id="btnupdate" >
+							<input type="reset" class="btn btn-info" id="clear"  value="Cancel">							
+						</div>
+						
+		      </form>
+				
 			<form class="form-inline pull-right" role="form">  
-				 <div class="form-group"> 
+				 <%-- <div class="form-group"> 
 					<a class="btn btn-default btn-sm" href="${pageContext.request.contextPath}/add">
 					 <span class="glyphicon glyphicon-plus"></span>
 					</a>
-				</div> 
+				</div>  --%>
 				 
 				<%-- <span>
 						<a href="${pageContext.request.contextPath}/search" class="btn btn-default">
@@ -88,20 +117,109 @@ td a{
 			          console.log("Success..." + data);
 			     }}); 
 		});
-		$('body').on('change', '#search', function(){			
-			var othis=$(this).val();	
-			var JSONObject= {
-		            "first_name":othis	            
-		    };
-				 $.ajax({  
-			          url:el+"/search/",  
-			          type:'POST',	  
-			          data: JSON.stringify(JSONObject),
-			          contentType: 'application/json;charset=utf-8',
+		/* fucntion get data for update  */
+		  $('body').on('click', '.update', function(){	
+			 // $("#btnupdate").attr("style","display:grid");
+			  $("#btnupdate").val("Update");
+			var othis=$(this);			   	
+				$.ajax({  
+			          url:el+"/update/"+othis.attr("stuid"),  
+			          type:'get',	       
 			          success: function(data) {  
-			        	
+			  			
+			        	$("#id").val(data.RESPONSE_DATA[0].id);
+			        	$("#first_name").val(data.RESPONSE_DATA[0].first_name);
+			        	$("#last_name").val(data.RESPONSE_DATA[0].last_name);
+			        	$("#classroom").val(data.RESPONSE_DATA[0].classroom);
 			          console.log("Success..." + data);
 			     }});  
+			     
+		}); 
+		  /* fucntion get data for update  */
+		  $('body').on('click', '.view', function(){	
+			 // $("#btnupdate").attr("style","display:none");
+			  $("#btnupdate").val("ADD");
+			  var othis=$(this);		   	
+				$.ajax({  
+			          url:el+"/update/"+othis.attr("stuid"),  
+			          type:'get',	       
+			          success: function(data) {  
+			        	 	 $("#id").val(data.RESPONSE_DATA[0].id);
+				        	$("#first_name").val(data.RESPONSE_DATA[0].first_name);
+				        	$("#last_name").val(data.RESPONSE_DATA[0].last_name);
+				        	$("#classroom").val(data.RESPONSE_DATA[0].classroom);
+			          console.log("Success..." + data);
+			     }}); 
+		}); 
+		
+		  /* fucntion  for update  */
+		  $('body').on('click', '#btnupdate', function(){			
+			var othis=$(this);
+			var id=$("#id").val();
+			var f_name=$("#first_name").val();
+			var l_name=$("#last_name").val();
+			var classroom=$("#classroom").val();
+			var JSONObject= {
+					"id": id,
+		            "first_name":f_name,
+		            "last_name":l_name,
+		            "classroom":classroom
+		    };
+			if(othis.val()=="ADD"){
+				$.ajax({  
+				      url:'http://localhost:8080/WebServiceSpringDemo1/add/',  
+				      type:'post',
+				      contentType: 'application/json;charset=utf-8', // type of data
+//				       dataType: 'JSON',
+				      data: JSON.stringify(JSONObject), // make JSON string
+//				       crossDomain: true,
+				      success: function(data) { 
+//				                var jsonData = $.parseJSON(data); //if data is not json
+				                list();			
+			          	$("#id").val("");
+			        	$("#first_name").val("");
+			        	$("#last_name").val("");
+			        	$("#classroom").val("");
+				               console.log("Success..." + data);
+				      }}); 
+			}
+			else{
+				$.ajax({  
+			          url:el+"/update",  
+			          type:'put',	
+			          contentType: 'application/json;charset=utf-8', // type of data
+			          data: JSON.stringify(JSONObject), // make JSON string
+			          success: function(data) {  
+			            list();			
+			          	$("#id").val("");
+			        	$("#first_name").val("");
+			        	$("#last_name").val("");
+			        	$("#classroom").val("");
+			        	othis.val("ADD");
+			          console.log("Success..." + data);
+			     }});
+			}
+			
+			
+				 
+		}); 
+		
+		$('body').on('keyup', '#search', function(){			
+			var othis=$(this).val();	
+			if(othis==""){
+				list();
+			}
+			else{
+				 $.ajax({  
+			          url:el+"/search/"+othis,  
+			          type:'GET',	  
+			         // data: JSON.stringify(JSONObject),
+			          //contentType: 'application/json;charset=utf-8',
+			          success: function(data) {  
+			        $("#listcontent").html(createTable(data));
+			          console.log("Success..." + data);
+			     }}); 
+			}
 			    
 		});
 		
@@ -145,8 +263,9 @@ td a{
 	function actionButton(id){
 		 var str="";
 		 
-		 str+="<a class='btn btn-default' href='${pageContext.request.contextPath}/update/"+id+"'>Update</a>";		
-		 str+="<a class='btn btn-success' href='${pageContext.request.contextPath}/view/"+id+"'>View</a>";
+		 str+="<a class='btn btn-default update' stuid="+id+">Update</a>";
+		// str+="<a class='btn btn-default update'  href='${pageContext.request.contextPath}/update/"+id+"'>Update</a>";
+		 str+="<a class='btn btn-success view' stuid="+id+">View</a>";
 		 /* str+="<a class='btn btn-danger' onclick='Del("+id+");'>DELETE</a>"; */
 		 str+="<a class='btn btn-danger del'  stuid="+id+">DELETE</a>";
 		return str; 

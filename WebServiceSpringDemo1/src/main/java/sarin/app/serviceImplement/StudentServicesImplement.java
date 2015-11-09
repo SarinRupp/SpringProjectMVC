@@ -118,14 +118,14 @@ public class StudentServicesImplement implements StudentServices {
 			return false;
 	}
 
-	public ArrayList<Student> search(Student stu) throws SQLException {
+	public ArrayList<Student> search(String key) throws SQLException {
 		try {
 			Student s;
 			con=dataSource.getConnection();
 			ResultSet rs = null;
 			String sql = "SELECT * FROM  student where first_name like ?";
 			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1,"%" +stu.getFirst_name()+"%");
+			ps.setString(1,"%" +key+"%");
 			rs=ps.executeQuery();
 			ArrayList<Student> a = new ArrayList<Student>();
 			
@@ -147,6 +147,37 @@ public class StudentServicesImplement implements StudentServices {
 			}
 			return null;
 		// TODO Auto-generated method stub
+	}
+
+	public ArrayList<Student> update(int id) throws SQLException {
+		
+		try {
+			Student s;
+			con=dataSource.getConnection();
+			ResultSet rs = null;
+			String sql = "SELECT * FROM  student where id=?";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, id);			
+			rs=ps.executeQuery();
+			ArrayList<Student> a = new ArrayList<Student>();
+			
+			while(rs.next()){	
+				s = new Student();
+				s.setId(rs.getInt("id"));
+				s.setFirst_name(rs.getString("first_name"));
+				s.setLast_name(rs.getString("last_name"));
+				s.setClassroom(rs.getString("classroom"));
+				a.add(s);	
+			}
+			
+			return a;
+			}catch (SQLException e){
+				e.printStackTrace();
+			}
+			finally {
+				con.close();
+			}
+			return null;	
 	}
 	
 
