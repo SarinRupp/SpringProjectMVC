@@ -1,0 +1,8 @@
+<security:intercept-url pattern="/" access="permitAll" />
+<security:intercept-url pattern="/admin**"  access="hasRolel" />
+
+
+********antmatchers spring pattern******
+- ? single character
+- /admin* :only folder admin if have / more folder  can't access
+- /admin** : can continues access with more folder in admin folder
