@@ -22,17 +22,17 @@ public class MainController {
 	@RequestMapping(value={"/about"})
 	public String aboutPage(ModelMap m){
 		m.addAttribute("msg","ABOUT Page"+getPrincipal());
-		return "home";		
+		return "about";		
 	}
 	@RequestMapping(value={"/user"})
 	public String userPage(ModelMap m){
 		m.addAttribute("msg","USER Page");
-		return "home";		
+		return "user";		
 	}
 	@RequestMapping(value={"/admin"})
 	public String adminPage(ModelMap m){
 		m.addAttribute("msg","ADMIN Page"+getPrincipal());
-		return "home";		
+		return "admin";		
 	}
 	@RequestMapping(value={"/accessdeniced"})
 	public String accessdenicedPage(ModelMap m){
@@ -42,7 +42,7 @@ public class MainController {
 	@RequestMapping(value={"/dba"})
 	public String dbaPage(ModelMap m){
 		m.addAttribute("msg","DBA Page"+getPrincipal());
-		return "home";		
+		return "dba";		
 	}
 	@RequestMapping(value={"/logout"})
 	public String logoutPage(HttpServletRequest request,HttpServletResponse response){
