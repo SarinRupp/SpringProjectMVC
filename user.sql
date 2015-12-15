@@ -30,7 +30,7 @@ SELECT setval('"public"."tbuser_id_seq"', 112, true);
 -- ----------------------------
 -- Sequence structure for user_role_id_seq
 -- ----------------------------
-DROP SEQUENCE "user_role_id_seq";
+
 CREATE SEQUENCE "user_role_id_seq"
  INCREMENT 1
  MINVALUE 1
@@ -42,7 +42,7 @@ SELECT setval('"public"."user_role_id_seq"', 4, true);
 -- ----------------------------
 -- Sequence structure for users_id_seq
 -- ----------------------------
-DROP SEQUENCE "users_id_seq";
+
 CREATE SEQUENCE "users_id_seq"
  INCREMENT 1
  MINVALUE 1
