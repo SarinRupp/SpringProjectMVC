@@ -27,13 +27,22 @@ public class MainController {
 	}
 	@RequestMapping(value={"/user"},method= RequestMethod.GET)
 	public String userPage(ModelMap m){
+<<<<<<< HEAD:Spring_Security_Demo/src/main/java/sarin/app/controller/MainController.java
+		m.addAttribute("msg","USER Page");
+		return "user";		
+=======
 		m.addAttribute("me","USER Page");
 		return "user/user";		
+>>>>>>> 24e4dcf84e851466aeacbb15a74ee334790a758f:Spring_Security_XMLConfig/src/main/java/sarin/app/controller/MainController.java
 	}
 	@RequestMapping(value={"/admin"},method= RequestMethod.GET)
 	public String adminPage(ModelMap m){
 		m.addAttribute("msg","ADMIN Page"+getPrincipal());
+<<<<<<< HEAD:Spring_Security_Demo/src/main/java/sarin/app/controller/MainController.java
+		return "admin";		
+=======
 		return "admin/admin";		
+>>>>>>> 24e4dcf84e851466aeacbb15a74ee334790a758f:Spring_Security_XMLConfig/src/main/java/sarin/app/controller/MainController.java
 	}
 	@RequestMapping(value={"/accessdeniced"},method= RequestMethod.GET)
 	public String accessdenicedPage(ModelMap m){
@@ -43,7 +52,11 @@ public class MainController {
 	@RequestMapping(value={"/dba"},method= RequestMethod.GET)
 	public String dbaPage(ModelMap m){
 		m.addAttribute("msg","DBA Page"+getPrincipal());
+<<<<<<< HEAD:Spring_Security_Demo/src/main/java/sarin/app/controller/MainController.java
+		return "dba";		
+=======
 		return "dba/dba";		
+>>>>>>> 24e4dcf84e851466aeacbb15a74ee334790a758f:Spring_Security_XMLConfig/src/main/java/sarin/app/controller/MainController.java
 	}
 	@RequestMapping(value={"/logout"},method= RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request,HttpServletResponse response){
